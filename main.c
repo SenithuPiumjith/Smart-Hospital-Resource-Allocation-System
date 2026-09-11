@@ -5,6 +5,12 @@
 #define NUM_WARDS 4
 #define MAX_BED_SLOTS 20
 
+void displayMenu(void);
+void registerPatient(void);
+void displaySortedPatients(void);
+void generateReport(void);
+void displayBedStatus(void);
+
 struct doctorSpecRow
 {
     int specialtyId;
@@ -30,7 +36,7 @@ const struct doctorSpecRow doctorSpec[NUM_SPECIALTIES] = {
 
 const struct wardsDataRow wardData[NUM_WARDS] ={
     {1, "General", 3000, 20},
-    {2, "Paediatric", 6000, 10},
+    {2, "Paediatrics", 6000, 10},
     {3, "Surgical", 12000, 10},
     {4, "ICU", 25000, 5}
     };
@@ -61,10 +67,68 @@ int numPatients = 0;
 
 int specialtyQueueCount[NUM_SPECIALTIES] = {0};
 
-
 int main()
 {
+
+    //menu loop
+    int choice;
+
+    do{
+        displayMenu();
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            registerPatient();
+            break;
+        case 2:
+            displaySortedPatients();
+            break;
+        case 3:
+            generateReport();
+            break;
+        case 4:
+            displayBedStatus();
+            break;
+        case 5:
+            printf("Saving and exiting...\n");
+            break;
+        default:
+            printf("Invalid choice, try again.\n");
+        }
+    }while (choice != 5);
 
 
     return 0;
 }
+
+void displayMenu(void)
+    {
+        printf("1. Register Patient\n");
+        printf("2. Display Sorted Patients\n");
+        printf("3. Generate Report\n");
+        printf("4. Display Bed status\n");
+        printf("5. Exit\n");
+        printf("Enter Choice: ");
+    }
+
+void registerPatient(void)
+    {
+        printf("register patient not implemented yet\n");
+    }
+
+void displaySortedPatients(void)
+    {
+        printf("display sorted patients not implemented yet\n");
+    }
+
+void generateReport(void)
+    {
+        printf("generate report not implemented yet\n");
+    }
+
+void displayBedStatus(void)
+    {
+        printf("display bed status not implemented yet\n");
+    }

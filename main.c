@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define MAX_PATIENTS 100
 #define NUM_SPECIALTIES 4
 #define NUM_WARDS 4
@@ -67,8 +68,7 @@ int numPatients = 0;
 
 int specialtyQueueCount[NUM_SPECIALTIES] = {0};
 
-int main()
-{
+int main(){
 
     //menu loop
     int choice;
@@ -115,7 +115,71 @@ void displayMenu(void)
 
 void registerPatient(void)
     {
-        printf("register patient not implemented yet\n");
+        if (numPatients >= MAX_PATIENTS){
+            printf("Hospital patient limit reached - cannot register.\n");
+            return;
+        }
+        else{
+        char name[50];
+        int age;
+        int triageLevel;
+        int specId;
+        int admittedFlag;
+        int wardId;
+        int daysAdmitted;
+
+        printf("Enter Patient name: ");
+        scanf(" %49[^\n]", name);
+
+        do{
+            printf("Enter Patient age: ");
+            scanf("%d", &age);
+        }while (age < 0);
+
+        do{
+            printf("Enter Emergency Level: ");
+            scanf("%d", &triageLevel);
+        }while (triageLevel < 1 || triageLevel > 3);
+
+        do{
+            printf("Enter Specialty ID: ");
+            scanf("%d", &specId);
+        }while (specId < 1 || specId > 4);
+
+        do{
+            printf("Is Patient Admitted? (1=Yes, 0=No): ");
+            scanf("%d", &admittedFlag);
+
+            if (admittedFlag == 1){
+
+                do{
+                printf("Enter WardID: ");
+                scanf("%d", &wardId);
+                }while(wardId < 1 || wardId > 4);
+
+                do{
+                printf("Enter Admitted days: ");
+                scanf("%d", &daysAdmitted);
+                }while(daysAdmitted <= 0);
+            }
+
+            else{
+              daysAdmitted = 0;
+              wardId = 0; //There is no 0 ward.Just add to remove assigning garbage value.
+            }
+        }while(admittedFlag != 0 && admittedFlag != 1);
+
+        strcpy(patients[numPatients].name, name);
+        patients[numPatients].age = age;
+        patients[numPatients].triageLevel = triageLevel;
+        patients[numPatients].specId = specId;
+        patients[numPatients].admittedFlag = admittedFlag;
+        patients[numPatients].wardId = wardId;
+        patients[numPatients].daysAdmitted = daysAdmitted;
+
+        numPatients++;
+
+        }
     }
 
 void displaySortedPatients(void)
@@ -130,5 +194,17 @@ void generateReport(void)
 
 void displayBedStatus(void)
     {
-        printf("display bed status not implemented yet\n");
+        for (int w = 0; w < NUM_WARDS; w++)
+        {
+            printf("%s:\n", wardData[w].wardName);
+
+            for (int s = 0; s < wardData[w].bedCap; s++)
+            {
+                if (bedOccupancy[w][s] == 0){
+                    printf("  Bed %2d: Available\n", s+1);
+                }else{
+                    printf("  Bed %2d: Occupied\n", s+1);
+                }
+            }
+        }
     }

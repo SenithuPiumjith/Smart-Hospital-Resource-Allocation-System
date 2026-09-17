@@ -13,6 +13,13 @@ void generateReport(void);
 void displayBedStatus(void);
 int assignBed(int wardID);
 
+double calculateWaitTime(int patientsInLine, int avgTimePerPatient);
+double calculateSurcharge(double baseFee, int triageLevel);
+double calculateWardCost(int daysAdmitted, double bedRate);
+double calculateGrossTotal(double baseFee, double surcharge, double wardCost);
+double calculateDiscount(double grossTotal, int age);
+double calculateFinalAmount(double grossTotal, double discount);
+
 struct doctorSpecRow
 {
     int specialtyId;
@@ -168,12 +175,10 @@ void registerPatient(void)
                     daysAdmitted = 0;
                 }
                 else{
-
-                    do{
                     bedNum = assignedBed;
+                    do{
                     printf("Enter Admitted days: ");
                     scanf("%d", &daysAdmitted);
-                    patients[numPatients].bedNum = bedNum;
                     }while(daysAdmitted <= 0);
                 }
 
@@ -193,6 +198,7 @@ void registerPatient(void)
         patients[numPatients].admittedFlag = admittedFlag;
         patients[numPatients].wardId = wardId;
         patients[numPatients].daysAdmitted = daysAdmitted;
+        patients[numPatients].bedNum = bedNum;
 
         numPatients++;
 
@@ -226,6 +232,7 @@ void displayBedStatus(void)
         }
     }
 
+//Functions with return values
 int assignBed(int wardId)
 {
     for (int s = 0; s < wardData[wardId].bedCap; s++){
@@ -235,4 +242,42 @@ int assignBed(int wardId)
         }
     }
     return -1; //nothing was free. Therefore return -1(no -1 bed)
+}
+
+double calculateWaitTime(int patientsInLine, int avgTimePerPatient)
+{
+    return patientsInLine * avgTimePerPatient;
+}
+
+double calculateSurcharge(double baseFee, int triageLevel)
+{
+    if (triageLevel == 3){
+        return baseFee * 0.5;
+    }else if (triageLevel == 2){
+        return baseFee * 0.2;
+    }
+    return 0;
+}
+
+double calculateWardCost(int daysAdmitted, double bedRate)
+{
+    return daysAdmitted * bedRate;
+}
+
+double calculateGrossTotal(double baseFee, double surcharge, double wardCost)
+{
+    return baseFee + surcharge + wardCost;
+}
+
+double calculateDiscount(double grossTotal, int age)
+{
+    if (age < 5 || age > 65){
+        return grossTotal * 0.15;
+    }
+    return 0;
+}
+
+double calculateFinalAmount(double grossTotal, double discount)
+{
+    return grossTotal - discount;
 }

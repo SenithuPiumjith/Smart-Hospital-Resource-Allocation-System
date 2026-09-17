@@ -19,6 +19,7 @@ double calculateWardCost(int daysAdmitted, double bedRate);
 double calculateGrossTotal(double baseFee, double surcharge, double wardCost);
 double calculateDiscount(double grossTotal, int age);
 double calculateFinalAmount(double grossTotal, double discount);
+void formatCurrency(double amount, char* out);
 
 struct doctorSpecRow
 {
@@ -308,4 +309,22 @@ double calculateDiscount(double grossTotal, int age)
 double calculateFinalAmount(double grossTotal, double discount)
 {
     return grossTotal - discount;
+}
+
+void formatCurrency(double amount, char* out)
+{
+    char raw[30];
+    sprintf(raw, "%.2f", amount);
+
+    int decimalPos = strlen(raw) - 3;
+
+    int outIndex = 0;
+    for (int i = 0; i < decimalPos; i++) {
+        out[outIndex++] = raw[i];
+        int digitsRemaining = decimalPos - 1 - i;
+        if (digitsRemaining > 0 && digitsRemaining % 3 == 0) {
+            out[outIndex++] = ',';
+        }
+    }
+    strcpy(out + outIndex, raw + decimalPos);
 }

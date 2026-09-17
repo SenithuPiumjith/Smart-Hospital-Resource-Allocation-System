@@ -11,6 +11,7 @@ void registerPatient(void);
 void displaySortedPatients(void);
 void generateReport(void);
 void displayBedStatus(void);
+int assignBed(int wardID);
 
 struct doctorSpecRow
 {
@@ -127,6 +128,7 @@ void registerPatient(void)
         int admittedFlag;
         int wardId;
         int daysAdmitted;
+        int bedNum = 0;
 
         printf("Enter Patient name: ");
         scanf(" %49[^\n]", name);
@@ -157,11 +159,26 @@ void registerPatient(void)
                 scanf("%d", &wardId);
                 }while(wardId < 1 || wardId > 4);
 
-                do{
-                printf("Enter Admitted days: ");
-                scanf("%d", &daysAdmitted);
-                }while(daysAdmitted <= 0);
-            }
+
+                int assignedBed = assignBed(wardId-1);
+                if (assignedBed == -1){
+                    printf("Ward is full...Move to OPD instead.\n");
+                    admittedFlag = 0;
+                    wardId = 0;
+                    daysAdmitted = 0;
+                }
+                else{
+
+                    do{
+                    bedNum = assignedBed;
+                    printf("Enter Admitted days: ");
+                    scanf("%d", &daysAdmitted);
+                    patients[numPatients].bedNum = bedNum;
+                    }while(daysAdmitted <= 0);
+                }
+
+                }
+
 
             else{
               daysAdmitted = 0;
@@ -208,3 +225,14 @@ void displayBedStatus(void)
             }
         }
     }
+
+int assignBed(int wardId)
+{
+    for (int s = 0; s < wardData[wardId].bedCap; s++){
+        if(bedOccupancy[wardId][s] == 0){
+            bedOccupancy[wardId][s] = 1;
+            return s + 1;
+        }
+    }
+    return -1; //nothing was free. Therefore return -1(no -1 bed)
+}

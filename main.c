@@ -182,14 +182,35 @@ void registerPatient(void)
                     }while(daysAdmitted <= 0);
                 }
 
-                }
-
+            }
 
             else{
               daysAdmitted = 0;
               wardId = 0; //There is no 0 ward.Just add to remove assigning garbage value.
             }
         }while(admittedFlag != 0 && admittedFlag != 1);
+
+
+
+        double waitTime	= calculateWaitTime(specialtyQueueCount[specId - 1], doctorSpec[specId - 1].time);
+        specialtyQueueCount[specId - 1]++;
+
+        double baseFee = doctorSpec[specId - 1].baseFee;
+
+        double surcharge = calculateSurcharge(baseFee, triageLevel);
+
+        double bedRate = 0;
+        if (wardId > 0) {
+            bedRate = wardData[wardId - 1].bedRate;
+        }
+
+        double wardCost = calculateWardCost(daysAdmitted, bedRate);
+
+        double grossTotal = calculateGrossTotal(baseFee, surcharge, wardCost);
+
+        double discount = calculateDiscount(grossTotal, age);
+
+        double finalAmount = calculateFinalAmount(grossTotal, discount);
 
         strcpy(patients[numPatients].name, name);
         patients[numPatients].age = age;
@@ -199,6 +220,13 @@ void registerPatient(void)
         patients[numPatients].wardId = wardId;
         patients[numPatients].daysAdmitted = daysAdmitted;
         patients[numPatients].bedNum = bedNum;
+        patients[numPatients].waitTime = waitTime;
+        patients[numPatients].baseFee = baseFee;
+        patients[numPatients].surcharge = surcharge;
+        patients[numPatients].wardCost = wardCost;
+        patients[numPatients].grossTotal = grossTotal;
+        patients[numPatients].discount = discount;
+        patients[numPatients].finalAmount = finalAmount;
 
         numPatients++;
 

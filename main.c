@@ -237,9 +237,36 @@ void registerPatient(void)
     }
 
 void displaySortedPatients(void)
-    {
-        printf("display sorted patients not implemented yet\n");
+{
+    if (numPatients == 0) {
+        printf("\nNo patient records available to display.\n\n");
+        return;
     }
+
+    int sortedIndices[MAX_PATIENTS];
+    for (int i = 0; i < numPatients; i++) {
+        sortedIndices[i] = i;
+    }
+
+    for (int i = 0; i < numPatients - 1; i++) {
+        for (int j = 0; j < numPatients - i - 1; j++) {
+            int currentIdx = sortedIndices[j];
+            int nextIdx = sortedIndices[j + 1];
+
+            if (patients[nextIdx].triageLevel > patients[currentIdx].triageLevel) {
+                int temp = sortedIndices[j];
+                sortedIndices[j] = sortedIndices[j + 1];
+                sortedIndices[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("\n--- PATIENTS SORTED BY PRIORITY (CRITICAL FIRST) ---\n\n");
+    for (int i = 0; i < numPatients; i++) {
+        printBill(sortedIndices[i]);
+        printf("\n");
+    }
+}
 
 void generateReport(void)
     {

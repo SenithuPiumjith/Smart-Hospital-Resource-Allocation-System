@@ -359,11 +359,51 @@ void printBill(int i)
 
     printf("Urgency Level : Level %d (%s)\n", patients[i].triageLevel, triageLabel[patients[i].triageLevel - 1]);
 
-    printf("----------------------------------------------------------------------------------------\n");
-    //not yet
-    printf("----------------------------------------------------------------------------------------\n");
-    //not yet
-    printf("====================================================\n");
-    //not yet
+    char buf[30];
 
+    printf("----------------------------------------------------------------------------------------\n");
+
+    formatCurrency(patients[i].baseFee, buf);
+    printf("Base Consultation Fee : LKR %s\n", buf);
+
+    formatCurrency(patients[i].surcharge, buf);
+    if (patients[i].triageLevel == 3) {
+        printf("Emergency Surcharge   : LKR %s (50%%)\n", buf);
+    } else if (patients[i].triageLevel == 2) {
+        printf("Emergency Surcharge   : LKR %s (20%%)\n", buf);
+    } else {
+        printf("Emergency Surcharge   : LKR %s\n", buf);
+    }
+
+    formatCurrency(patients[i].wardCost, buf);
+    if (patients[i].daysAdmitted > 0) {
+        printf("Ward Stay Cost (%d Days) : LKR %s\n", patients[i].daysAdmitted, buf);
+    } else {
+        printf("Ward Stay Cost         : LKR %s\n", buf);
+    }
+
+    printf("----------------------------------------------------------------------------------------\n");
+
+    formatCurrency(patients[i].grossTotal, buf);
+    printf("Gross Total Bill      : LKR %s\n", buf);
+
+    formatCurrency(patients[i].discount, buf);
+    if (patients[i].discount > 0) {
+        printf("Age Subsidy Discount  : LKR -%s (15%%)\n", buf);
+    } else {
+        printf("Age Subsidy Discount  : LKR -%s\n", buf);
+    }
+
+    printf("----------------------------------------------------------------------------------------\n");
+
+    formatCurrency(patients[i].finalAmount, buf);
+    printf("Final Payable Amount  : LKR %s\n", buf);
+
+    printf("Estimated Waiting Time : %.2f mins", patients[i].waitTime);
+    if (patients[i].waitTime == 0) {
+        printf(" (Immediate Attention)");
+    }
+    printf("\n");
+
+    printf("====================================================\n");
 }

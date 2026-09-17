@@ -20,6 +20,7 @@ double calculateGrossTotal(double baseFee, double surcharge, double wardCost);
 double calculateDiscount(double grossTotal, int age);
 double calculateFinalAmount(double grossTotal, double discount);
 void formatCurrency(double amount, char* out);
+void printBill(int i);
 
 struct doctorSpecRow
 {
@@ -230,6 +231,7 @@ void registerPatient(void)
         patients[numPatients].finalAmount = finalAmount;
 
         numPatients++;
+        printBill(numPatients - 1);
 
         }
     }
@@ -327,4 +329,41 @@ void formatCurrency(double amount, char* out)
         }
     }
     strcpy(out + outIndex, raw + decimalPos);
+}
+
+void printBill(int i)
+{
+    const char* triageLabel[3] = {"Normal", "Urgent", "Critical"};
+
+    printf("====================================================\n");
+    printf(" SMART HOSPITAL ADMISSION & BILL\n");
+    printf("----------------------------------------------------------------------------------------\n");
+
+    printf("Patient ID    : PAT-%d\n", 1000 + i + 1);
+    printf("Patient Name  : %s\n", patients[i].name);
+
+    if (patients[i].discount > 0) {
+        printf("Age           : %d Years (15%% Subsidy Eligible)\n", patients[i].age);
+    } else {
+        printf("Age           : %d Years\n", patients[i].age);
+    }
+
+    printf("Specialty     : %s\n", doctorSpec[patients[i].specId - 1].specialtyName);
+
+    if (patients[i].wardId > 0) {
+        printf("Assigned Ward : %s (Bed #%02d)\n",
+               wardData[patients[i].wardId - 1].wardName, patients[i].bedNum);
+    } else {
+        printf("Assigned Ward : Outpatient (OPD)\n");
+    }
+
+    printf("Urgency Level : Level %d (%s)\n", patients[i].triageLevel, triageLabel[patients[i].triageLevel - 1]);
+
+    printf("----------------------------------------------------------------------------------------\n");
+    //not yet
+    printf("----------------------------------------------------------------------------------------\n");
+    //not yet
+    printf("====================================================\n");
+    //not yet
+
 }

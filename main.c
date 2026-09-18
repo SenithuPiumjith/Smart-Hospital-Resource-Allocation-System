@@ -270,7 +270,36 @@ void displaySortedPatients(void)
 
 void generateReport(void)
     {
-        printf("generate report not implemented yet\n");
+        int triageCount[3] = {0, 0, 0};
+        for (int i = 0; i < numPatients; i++) {
+            triageCount[patients[i].triageLevel - 1]++;
+        }
+
+        double totalRevenue = 0.0;
+        double totalDiscounts = 0.0;
+        for (int i = 0; i < numPatients; i++) {
+            totalRevenue += patients[i].finalAmount;
+            totalDiscounts += patients[i].discount;
+        }
+
+        int topIndex = 0;
+        for (int i = 0; i < numPatients; i++) {
+            if (patients[i].finalAmount > patients[topIndex].finalAmount) {
+                topIndex = i;
+            }
+        }
+
+        for (int w = 0; w < NUM_WARDS; w++) {
+            int occupied = 0;
+            for (int s = 0; s < wardData[w].bedCap; s++) {
+                if (bedOccupancy[w][s] == 1) {
+                    occupied++;
+                }
+            }
+            double percent = ((double)occupied / wardData[w].bedCap) * 100.0;
+            printf("   - %-12s : %.2f%% (%d/%d beds occupied)\n",
+                wardData[w].wardName, percent, occupied, wardData[w].bedCap);
+        }
     }
 
 void displayBedStatus(void)

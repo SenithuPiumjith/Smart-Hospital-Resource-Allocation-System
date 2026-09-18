@@ -26,6 +26,8 @@ void saveBedStatus(void);
 void loadBedStatus(void);
 void savePatientRecord(int i);
 
+void resetSystem(void);
+
 struct doctorSpecRow
 {
     int specialtyId;
@@ -110,6 +112,10 @@ int main(){
         case 5:
             printf("Saving and exiting...\n");
             break;
+        case 9:
+            resetSystem();
+            printf("All data reset.\n");
+            break;
         default:
             printf("Invalid choice, try again.\n");
         }
@@ -126,6 +132,7 @@ void displayMenu(void)
         printf("3. Generate Report\n");
         printf("4. Display Bed status\n");
         printf("5. Exit\n");
+        printf("9. Data Reset\n");
         printf("Enter Choice: ");
     }
 
@@ -567,4 +574,22 @@ void savePatientRecord(int i)
             patients[i].finalAmount);
 
     fclose(fp);
+}
+void resetSystem(void)
+{
+    FILE* fp1 = fopen("beds_status.txt", "w");
+    if (fp1 != NULL) { fclose(fp1); }
+
+    FILE* fp2 = fopen("patient_records.txt", "w");
+    if (fp2 != NULL) { fclose(fp2); }
+
+    for (int w = 0; w < NUM_WARDS; w++) {
+        for (int s = 0; s < MAX_BED_SLOTS; s++) {
+            bedOccupancy[w][s] = 0;
+        }
+    }
+    numPatients = 0;
+    for (int i = 0; i < NUM_SPECIALTIES; i++) {
+        specialtyQueueCount[i] = 0;
+    }
 }

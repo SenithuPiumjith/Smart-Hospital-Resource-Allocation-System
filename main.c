@@ -523,7 +523,7 @@ void loadBedStatus(void)
 {
     FILE* fp = fopen("beds_status.txt", "r");
     if (fp == NULL) {
-        // First run ever — file doesn't exist yet, which is expected behavior
+
         return;
     }
 
@@ -534,6 +534,34 @@ void loadBedStatus(void)
             }
         }
     }
+
+    fclose(fp);
+}
+
+void savePatientRecord(int i)
+{
+    FILE* fp = fopen("patient_records.txt", "a");
+    if (fp == NULL) {
+        printf("Error: Could not open patient_records.txt for appending.\n");
+        return;
+    }
+
+    fprintf(fp, "PAT-%d,%s,%d,%d,%d,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
+            1000 + i + 1,
+            patients[i].name,
+            patients[i].age,
+            patients[i].triageLevel,
+            patients[i].specId,
+            patients[i].admittedFlag,
+            patients[i].wardId,
+            patients[i].daysAdmitted,
+            patients[i].waitTime,
+            patients[i].baseFee,
+            patients[i].surcharge,
+            patients[i].wardCost,
+            patients[i].grossTotal,
+            patients[i].discount,
+            patients[i].finalAmount);
 
     fclose(fp);
 }

@@ -270,6 +270,11 @@ void displaySortedPatients(void)
 
 void generateReport(void)
     {
+        if (numPatients == 0) {
+            printf("\nNo patients registered yet.\n\n");
+            return;
+        }
+
         int triageCount[3] = {0, 0, 0};
         for (int i = 0; i < numPatients; i++) {
             triageCount[patients[i].triageLevel - 1]++;
@@ -289,6 +294,28 @@ void generateReport(void)
             }
         }
 
+        char revBuf[30], discBuf[30], topBuf[30];
+        formatCurrency(totalRevenue, revBuf);
+        formatCurrency(totalDiscounts, discBuf);
+        formatCurrency(patients[topIndex].finalAmount, topBuf);
+
+        printf("\n====================================================\n");
+        printf("         SMART HOSPITAL PERFORMANCE REPORT          \n");
+        printf("====================================================\n");
+
+        printf("1. PATIENT INTAKE BY URGENCY LEVEL\n");
+        printf("   - Total Patients Registered : %d\n", numPatients);
+        printf("   - Level 1 (Normal)          : %d\n", triageCount[0]);
+        printf("   - Level 2 (Urgent)          : %d\n", triageCount[1]);
+        printf("   - Level 3 (Critical)        : %d\n", triageCount[2]);
+        printf("----------------------------------------------------\n");
+
+        printf("2. FINANCIAL OVERVIEW\n");
+        printf("   - Total Revenue Collected   : LKR %s\n", revBuf);
+        printf("   - Total Discounts Granted   : LKR %s\n", discBuf);
+        printf("----------------------------------------------------\n");
+
+        printf("3. WARD BED OCCUPANCY RATES\n");
         for (int w = 0; w < NUM_WARDS; w++) {
             int occupied = 0;
             for (int s = 0; s < wardData[w].bedCap; s++) {
@@ -300,6 +327,12 @@ void generateReport(void)
             printf("   - %-12s : %.2f%% (%d/%d beds occupied)\n",
                 wardData[w].wardName, percent, occupied, wardData[w].bedCap);
         }
+        printf("----------------------------------------------------\n");
+
+        printf("4. HIGHEST-PAYING PATIENT\n");
+        printf("   - Patient Name              : %s\n", patients[topIndex].name);
+        printf("   - Final Bill Amount         : LKR %s\n", topBuf);
+        printf("====================================================\n\n");
     }
 
 void displayBedStatus(void)

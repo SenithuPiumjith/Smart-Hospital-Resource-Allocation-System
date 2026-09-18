@@ -84,6 +84,8 @@ int specialtyQueueCount[NUM_SPECIALTIES] = {0};
 
 int main(){
 
+    loadBedStatus();
+
     //menu loop
     int choice;
 
@@ -236,7 +238,8 @@ void registerPatient(void)
 
         numPatients++;
         printBill(numPatients - 1);
-
+        savePatientRecord(numPatients - 1);
+        saveBedStatus();
         }
     }
 

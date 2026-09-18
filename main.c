@@ -22,6 +22,10 @@ double calculateFinalAmount(double grossTotal, double discount);
 void formatCurrency(double amount, char* out);
 void printBill(int i);
 
+void saveBedStatus(void);
+void loadBedStatus(void);
+void savePatientRecord(int i);
+
 struct doctorSpecRow
 {
     int specialtyId;
@@ -495,4 +499,41 @@ void printBill(int i)
     printf("\n");
 
     printf("====================================================\n");
+}
+
+void saveBedStatus(void)
+{
+    FILE* fp = fopen("beds_status.txt", "w");
+    if (fp == NULL) {
+        printf("Error: Could not open beds_status.txt for writing.\n");
+        return;
+    }
+
+    for (int w = 0; w < NUM_WARDS; w++) {
+        for (int s = 0; s < wardData[w].bedCap; s++) {
+            fprintf(fp, "%d ", bedOccupancy[w][s]);
+        }
+        fprintf(fp, "\n");
+    }
+
+    fclose(fp);
+}
+
+void loadBedStatus(void)
+{
+    FILE* fp = fopen("beds_status.txt", "r");
+    if (fp == NULL) {
+        // First run ever — file doesn't exist yet, which is expected behavior
+        return;
+    }
+
+    for (int w = 0; w < NUM_WARDS; w++) {
+        for (int s = 0; s < wardData[w].bedCap; s++) {
+            if (fscanf(fp, "%d", &bedOccupancy[w][s]) != 1) {
+                break;
+            }
+        }
+    }
+
+    fclose(fp);
 }

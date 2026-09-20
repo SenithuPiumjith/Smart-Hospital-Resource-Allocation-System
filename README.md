@@ -1,4 +1,4 @@
-# Smart Hospital & Resource Allocation System
+# Smart Hospital and Resource Allocation System
 
 A menu driven patient intake, billing, and resource allocation system written in C. Registers patients, triages them by urgency, allocates beds in real time, generates itemized bills, and produces operational analytics  with data that persists across runs.
 
@@ -6,12 +6,12 @@ A menu driven patient intake, billing, and resource allocation system written in
 
 - Patient intake with full input validation (name, age, triage level, specialty, admission details)
 - Real time bed allocation across four wards, with automatic fallback to outpatient status when a ward is full
-- Six-part billing engine: consultation fees, emergency surcharges, ward costs, and age-based subsidy discounts
+- Six part billing engine: consultation fees, emergency surcharges, ward costs, and age based subsidy discounts
 - Priority based patient sorting (critical cases first, stable on registration order)
-- Reporting dashboard: urgency breakdowns, total revenue and discounts, per-ward occupancy, highest-paying patient
+- Reporting dashboard: urgency breakdowns, total revenue and discounts, per ward occupancy, highest paying patient
 - Persistent storage  bed status survives a restart; every transaction is permanently logged
 
-## Build & Run
+## Build and Run
 
 ```bash
 gcc *.c -o hospital_system
@@ -37,7 +37,7 @@ No external dependencies. Built and tested with GCC / Code::Blocks (MinGW).
 | `beds_status.txt` | Bed occupancy grid - loaded on startup, saved after each admission |
 | `patient_records.txt` | Append only log of every billing transaction, across all runs |
 
-## Wards & Specialties
+## Wards and Specialties
 
 | Ward | Daily Rate | Capacity |
 |---|---|---|
